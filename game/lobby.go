@@ -128,6 +128,9 @@ func HandleEvent(raw []byte, received *JSEvent, lobby *Lobby, player *Player) er
 		drawer := lobby.Drawer
 		if player == drawer && len(lobby.WordChoice) > 0 && chosenIndex >= 0 && chosenIndex <= 2 {
 			lobby.CurrentWord = lobby.WordChoice[chosenIndex]
+			for _, word := range lobby.WordChoice {
+				lobby.alreadyUsedWords = append(lobby.alreadyUsedWords, word)
+			}
 			lobby.WordChoice = nil
 			lobby.WordHints = createWordHintFor(lobby.CurrentWord, false)
 			lobby.WordHintsShown = createWordHintFor(lobby.CurrentWord, true)
@@ -431,7 +434,6 @@ func endTurn(lobby *Lobby) {
 	}
 
 	lobby.scoreEarnedByGuessers = 0
-	lobby.alreadyUsedWords = append(lobby.alreadyUsedWords, lobby.CurrentWord)
 	lobby.CurrentWord = ""
 	lobby.WordHints = nil
 
